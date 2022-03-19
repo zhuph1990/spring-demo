@@ -12,7 +12,7 @@
     <!--bean标签表示要创建的bean对象
         id:bean的唯一标识，为了跟其他的bean区分
         class:表示要创建的bean的完全限定名-->
-    <bean id="person" class="com.zph.bean.Person">
+    <bean id="person" class="com.zph.xmlconfigation.bean.Person">
         <!--给属性赋值使用property标签
         name:表示属性的名称
         value：表示具体的属性值
@@ -30,7 +30,7 @@
         value:表示实际的具体值
         type:表示值的类型
         index:表示值的下标，从0开始-->
-    <bean id="person2" class="com.zph.bean.Person">
+    <bean id="person2" class="com.zph.xmlconfigation.bean.Person">
         <constructor-arg name="id" value="2"></constructor-arg>
         <constructor-arg name="name" value="suarez"></constructor-arg>
         <constructor-arg name="age" value="35"></constructor-arg>
@@ -40,7 +40,7 @@
     <!--当通过构造器方法赋值的时候，可以把name属性省略不写，
     但是要注意必须要保证参数值跟构造器的参数列表的顺序一致
     如果非要不一致的话，可以通过index的下标方式来标注，从0开始-->
-    <bean id="person3" class="com.zph.bean.Person">
+    <bean id="person3" class="com.zph.xmlconfigation.bean.Person">
         <constructor-arg value="3"></constructor-arg>
         <constructor-arg value="男" index="3"></constructor-arg>
         <constructor-arg value="37"></constructor-arg>
@@ -50,7 +50,7 @@
     <!--当有多个相同参数的构造方法存在的时候，默认情况下是覆盖的过程，
     后面的构造方法会覆盖前面的构造方法
     如果非要赋值给另外一个构造方法的话，可以使用type的参数来进行指定-->
-    <bean id="person4" class="com.zph.bean.Person">
+    <bean id="person4" class="com.zph.xmlconfigation.bean.Person">
         <constructor-arg value="4"></constructor-arg>
         <constructor-arg value="alaba"></constructor-arg>
         <constructor-arg value="22" type="java.lang.Integer"></constructor-arg>
@@ -59,13 +59,13 @@
     <!--总结：在日常工作中，一般都是用name,value的方式，很少有人去使用index或者type的方式，但是要注意各种情况出现的问题-->
 
     <!--使用p命名空间来给属性赋值 解决属性重名的问题-->
-    <bean id="person5" class="com.zph.bean.Person" p:id="5" p:name="Roberto" p:age="30" p:gender="男">
+    <bean id="person5" class="com.zph.xmlconfigation.bean.Person" p:id="5" p:name="Roberto" p:age="30" p:gender="男">
     </bean>
 
     <!--分割线-->
 
     <!--给复杂类型进行赋值操作-->
-    <bean id="person6" class="com.zph.bean.Person">
+    <bean id="person6" class="com.zph.xmlconfigation.bean.Person">
         <property name="id" value="6"></property>
         <property name="name" value="Stegen"></property>
         <property name="age" value="60"></property>
@@ -89,12 +89,12 @@
         <property name="lists">
             <list>
                 <!--使用内部bean,无法从IOC容器中直接获取对象的值 address2 -->
-                <bean id="address2" class="com.zph.bean.Address">
+                <bean id="address2" class="com.zph.xmlconfigation.bean.Address">
                     <property name="province" value="陕西省"></property>
                     <property name="city" value="咸阳市"></property>
                     <property name="town" value="秦都区"></property>
                 </bean>
-                <bean class="com.zph.bean.Address">
+                <bean class="com.zph.xmlconfigation.bean.Address">
                     <property name="province" value="陕西省"></property>
                     <property name="city" value="宝鸡市"></property>
                     <property name="town" value="临渭区"></property>
@@ -119,7 +119,7 @@
                 <entry key="interest" value="football"></entry>
                 <entry key="location" value-ref="address"></entry>
                 <entry key="address2">
-                    <bean class="com.zph.bean.Address">
+                    <bean class="com.zph.xmlconfigation.bean.Address">
                         <property name="province" value="陕西省"></property>
                         <property name="city" value="榆林市"></property>
                         <property name="town" value="榆阳区"></property>
@@ -150,7 +150,7 @@
         </property>
     </bean>
 
-    <bean id="address" class="com.zph.bean.Address">
+    <bean id="address" class="com.zph.xmlconfigation.bean.Address">
         <property name="province" value="陕西省"></property>
         <property name="city" value="西安市"></property>
         <property name="town" value="未央区"></property>
@@ -158,14 +158,14 @@
 
     <!--bean之间的继承关系-->
     <!--可以使用abstract标签定义抽象bean，无法进行实例化-->
-    <bean id="parent" class="com.zph.bean.Person" abstract="false">
+    <bean id="parent" class="com.zph.xmlconfigation.bean.Person" abstract="false">
         <property name="id" value="1"></property>
         <property name="name" value="guardiola"></property>
         <property name="age" value="51"></property>
         <property name="gender" value="男"></property>
     </bean>
     <!--可以通过parent属性来获取父bean中的某些属性值-->
-    <bean id="son" class="com.zph.bean.Person" parent="parent">
+    <bean id="son" class="com.zph.xmlconfigation.bean.Person" parent="parent">
         <property name="name" value="xavi"></property>
     </bean>
 
@@ -174,8 +174,8 @@
      如果需要干扰创建的顺序，可以使用depends-on属性
      一般在实际工作中不必在意bean创建的顺序，无论谁先创建，需要依赖的对象在创建完成之后都会进行赋值操作
      -->
-    <bean id="address3" class="com.zph.bean.Address" depends-on="person7"></bean>
-    <bean id="person7" class="com.zph.bean.Person">
+    <bean id="address3" class="com.zph.xmlconfigation.bean.Address" depends-on="person7"></bean>
+    <bean id="person7" class="com.zph.xmlconfigation.bean.Person">
         <property name="name" value="suarez"></property>
     </bean>
 
@@ -191,7 +191,7 @@
         如果是singleton作用域的话，每次在创建IOC容器完成之前此对象已经创建完成
         如果是prototype作用域的话，每次是在需要用到此对象的时候才会创建
     -->
-    <bean id="person8" class="com.zph.bean.Person" scope="singleton"></bean>
+    <bean id="person8" class="com.zph.xmlconfigation.bean.Person" scope="singleton"></bean>
 
 
     <!--利用工厂方法创建bean-->
@@ -206,7 +206,7 @@
         factory-method:表示具体工厂实例的方法
     -->
     <bean id="instanceFactory" class="com.zph.xmlconfigation.factory.PersonInstanceFactory"></bean>
-    <bean id="person10" class="com.zph.bean.Person" factory-bean="instanceFactory" factory-method="getInstance">
+    <bean id="person10" class="com.zph.xmlconfigation.bean.Person" factory-bean="instanceFactory" factory-method="getInstance">
         <constructor-arg value="suarez10"></constructor-arg>
     </bean>
 
@@ -226,7 +226,7 @@
          如果是singleton的话，初始化和销毁的方法都存在
          如果是prototype的话，初始化方法会调用，但是销毁的方法不会调用
     -->
-    <bean id="person11" class="com.zph.bean.Person" init-method="init" destroy-method="destory"
+    <bean id="person11" class="com.zph.xmlconfigation.bean.Person" init-method="init" destroy-method="destory"
           scope="prototype"></bean>
 
     <!--spring中包含一个BeanPostProcessor的接口，可以在bean的初始化方法的前后调用该方法，
@@ -234,7 +234,7 @@
     对所有的bean对象进行增强-->
     <!-- <bean id="myBeanPostProcessor" class="com.zph.bean.MyBeanPostProcessor"></bean>-->
 
-    <bean id="address4" class="com.zph.bean.Address"></bean>
+    <bean id="address4" class="com.zph.xmlconfigation.bean.Address"></bean>
 
 
 
@@ -263,7 +263,7 @@
         <property name="driverClassName" value="${driverClassName}"></property>
     </bean>
 
-    <bean id="person12" class="com.zph.bean.Person">
+    <bean id="person12" class="com.zph.xmlconfigation.bean.Person">
         <property name="name" value="${jdbc.username}"></property>
     </bean>
 
@@ -271,13 +271,13 @@
 
 
     <!--spring中的自动装配-->
-    <bean id="address5" class="com.zph.bean.Address">
+    <bean id="address5" class="com.zph.xmlconfigation.bean.Address">
         <property name="province" value="陕西"></property>
         <property name="city" value="西安"></property>
         <property name="town" value="未央"></property>
     </bean>
 
-    <bean id="address6" class="com.zph.bean.Address">
+    <bean id="address6" class="com.zph.xmlconfigation.bean.Address">
         <property name="province" value="陕西2"></property>
         <property name="city" value="西安2"></property>
         <property name="town" value="未央2"></property>
@@ -296,7 +296,7 @@
 
 
     <!--SpEL表达式语言的使用-->
-    <bean id="person14" class="com.zph.bean.Person">
+    <bean id="person14" class="com.zph.xmlconfigation.bean.Person">
         <!--可以引入bean对象的属性-->
         <property name="name" value="#{address.province}"></property>
         <!--可以支持运算符的所有操作-->

@@ -1,6 +1,6 @@
 package com.zph.xmlconfigation.factory;
 
-import com.zph.bean.Person;
+import com.zph.xmlconfigation.bean.Person;
 
 /**
  * 静态工厂类

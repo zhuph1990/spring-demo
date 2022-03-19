@@ -1,4 +1,4 @@
-package com.zph.bean;
+package com.zph.xmlconfigation.bean;
 
 import java.util.*;
 

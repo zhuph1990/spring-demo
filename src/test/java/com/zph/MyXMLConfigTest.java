@@ -1,8 +1,8 @@
 package com.zph;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.zph.bean.Address;
-import com.zph.bean.Person;
+import com.zph.xmlconfigation.bean.Address;
+import com.zph.xmlconfigation.bean.Person;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

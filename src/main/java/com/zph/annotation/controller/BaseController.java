@@ -1,5 +1,7 @@
 package com.zph.annotation.controller;
 
+import com.zph.annotation.bean.Teacher;
+import com.zph.annotation.dao.BaseDao;
 import com.zph.annotation.dao.StudentDao;
 import com.zph.annotation.dao.TeacherDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,19 @@ public class BaseController {
     @Autowired
     StudentDao studentDao;
 
-    public void save(){
-        teacherDao.save();
+    @Autowired
+    BaseDao<Teacher> baseDao;
+
+//    public void save(){
+//        teacherDao.save();
+//    }
+//
+//    public void save2(){
+//        studentDao.save();
+//    }
+
+    public void save() {
+        baseDao.save();
     }
 
-    public void save2(){
-        studentDao.save();
-    }
 }

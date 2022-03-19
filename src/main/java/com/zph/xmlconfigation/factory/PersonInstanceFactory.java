@@ -1,6 +1,6 @@
 package com.zph.xmlconfigation.factory;
 
-import com.zph.bean.Person;
+import com.zph.xmlconfigation.bean.Person;
 
 /**
  * 实例工厂 友好 易于扩展 兼容性

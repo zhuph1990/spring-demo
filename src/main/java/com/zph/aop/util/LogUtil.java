@@ -22,12 +22,13 @@ public class LogUtil {
      * @AfterReturing：返回通知：在返回结果之后运行
      * @AfterThrowing：异常通知：出现异常的时候使用
      * @Around：环绕通知 在方法的参数列表中不要随便添加参数值，会有异常信息
-     * <p>
+     *
      * 切入点表达式：
      * 最精确的匹配方式：
      * public Integer com.zph.aop.service.MyCalculator.add(Integer,Integer)
-     * 在实际的生产环境中，更多的时候使用通配符的方式
-     * <p>
+     *
+     * 在实际的生产环境中，更多的时候使用通配符的方式( *和.. )
+     *
      * *：
      * 1、可以用来匹配一个或者多个字符
      * execution( public Integer com.zph.aop.service.MyCalculator.*(Integer,Integer)
@@ -44,6 +45,7 @@ public class LogUtil {
      * execution(* com.zph.aop.service.MyCalculator.*(..))
      * 2、可以匹配多层路径
      * execution(* com.zph.aop.MyCalculator*.*(..))
+     *
      * 最偷懒的方式：
      * execution(* *(..))
      * execution(* *.*(..))
@@ -77,26 +79,18 @@ public class LogUtil {
      * 通知方法在定义的时候对于访问修饰符、返回值类型都没有明确的要求，
      * 但是要注意，参数不能随便添加
      *
-     * 如果有多个匹配的表达式相同，能否做抽象？
-     * 定义一个没有返回值的空方法，给该方法添加@PointCut注解，后续在使用的时候可以直接调用方法名称
-     * 此处的方法只是起一个声明的作用，能够供内部的其他通知方法进行调用
-     *
-     * 环绕通知：
-     * 环绕通知在执行的时候是优先于普通通知的
-     * 如果是正常结束，那么执行顺序是：
-     * 环绕前置通知-->@Before-->环绕后置通知-->环绕返回通知-->@After-->@AfterReturning
-     * 如果是异常结束，那么执行顺序是：
-     * 环绕前置通知-->@Before-->环绕异常通知-->环绕返回通知-->@After-->@AfterReturing
-     * 如果出现异常的时候，在环绕通知中解决了，那么普通通知是接受不到的，如果想让普通通知接收到需要进行抛出 throw throwable
-     * 执行顺序改为：
-     * 环绕前置通知-->@Before-->环绕异常通知-->环绕返回通知-->@After-->@AfterThrowing
-     *
      * 当应用程序中包含多个切面类的时候，具体的执行顺序是什么样？
      * 按照切面类的名称的首字母进行排序操作，按照字典序
      * 如果需要认为的规定顺序，可以在切面类上添加@Order注解同时可以添加具体的值
      * 值越小，越优先
      */
 
+
+    /**
+     *  如果有多个匹配的表达式相同，能否做抽象？
+     *  定义一个没有返回值的空方法，给该方法添加@PointCut注解，后续在使用的时候可以直接调用方法名称
+     *  此处的方法只是起一个声明的作用，能够供内部的其他通知方法进行调用
+     */
     @Pointcut("execution(public Integer com.zph.aop.service.MyCalculator.*(Integer,Integer))")
     public void myPointCut() {
     }
@@ -133,6 +127,21 @@ public class LogUtil {
 
     }
 
+    /**
+     * 环绕通知：
+     * 环绕通知在执行的时候是优先于普通通知的
+     * 如果是正常结束，那么执行顺序是：
+     * 环绕前置通知-->@Before-->环绕后置通知-->环绕返回通知-->@After-->@AfterReturning
+     * 如果是异常结束，那么执行顺序是：
+     * 环绕前置通知-->@Before-->环绕异常通知-->环绕返回通知-->@After-->@AfterReturing
+     * 如果出现异常的时候，在环绕通知中解决了，那么普通通知是接受不到的，如果想让普通通知接收到需要进行抛出 throw throwable
+     * 执行顺序改为：
+     * 环绕前置通知-->@Before-->环绕异常通知-->环绕返回通知-->@After-->@AfterThrowing
+     *
+     * @param pjp
+     * @return
+     * @throws Throwable
+     */
     @Around("myPointCut()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Signature signature = pjp.getSignature();
@@ -140,7 +149,8 @@ public class LogUtil {
         Object result = null;
         try {
             System.out.println("LOGGER---环绕通知start：" + signature.getName() + "方法开始执行，参数为：" + Arrays.asList(args));
-            //通过反射的方式调用目标的方法，相当于执行method.invoke(),可以自己修改结果值  // result=100;
+            //通过反射的方式调用目标的方法，相当于执行method.invoke(),可以自己修改结果值
+            // 类似于result = 100;
             result = pjp.proceed(args);
             System.out.println("LOGGER---环绕通知stop: " + signature.getName() + "方法执行结束");
         } catch (Throwable throwable) {

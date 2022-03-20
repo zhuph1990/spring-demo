@@ -43,4 +43,53 @@ public class MyAnnotationTest {
 
     }
 
+    @Test
+    public void test04() throws NoSuchMethodException {
+
+//        MyCalculator myCalculator = new MyCalculator();
+//        System.out.println(myCalculator.add(1, 2));
+//        System.out.println(myCalculator.div(1, 1));
+
+        Calculator calculator = (Calculator) CalculatorProxy.getProxy(new MyCalculator());
+        calculator.add(1, 1);
+        calculator.sub(1, 1);
+        calculator.mul(1, 1);
+        calculator.div(1, 0);
+        System.out.println(calculator.getClass());
+
+//        System.out.println("------------------");
+//        MyInterface proxy = (MyInterface) CalculatorProxy.getProxy(new MySubClass());
+//        proxy.show(100);
+
+    }
+
+    @Test
+    public void test05() throws NoSuchMethodException {
+        Calculator calculator = context.getBean("myCalculator", Calculator.class);
+        calculator.add(1, 1);
+        System.out.println(calculator.getClass());
+    }
+
+    // 存疑
+    @Test
+    public void test06() throws NoSuchMethodException {
+        MyCalculator2 myCalculator2 = context.getBean(MyCalculator2.class);
+        myCalculator2.div(1, 1);
+        System.out.println(myCalculator2.getClass());
+
+    }
+
+    @Test
+    public void test07() throws NoSuchMethodException {
+        MyCalculator2 myCalculator2 = context.getBean("myCalculator2", MyCalculator2.class);
+        myCalculator2.add(1, 1);
+    }
+
+    @Test
+    public void test08() throws NoSuchMethodException {
+        Calculator calculator = context.getBean("myCalculator", Calculator.class);
+        calculator.div(1, 1);
+        System.out.println(calculator.getClass());
+    }
+
 }

@@ -1498,7 +1498,7 @@ driverClassName=com.mysql.jdbc.Driver
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="username" value="${username}"></property>
         <property name="password" value="${password}"></property>
-        <property name="url" value="${url}"></property>
+        <property name="url" value="${jdbc.url}"></property>
         <property name="driverClassName" value="${driverClassName}"></property>
     </bean>
 </beans>
@@ -3770,7 +3770,7 @@ public class MyTest {
 
 ##### 1、环境准备
 
-tx.sql
+spring_db.sql
 
 ```sql
 /*
@@ -3841,7 +3841,6 @@ INSERT INTO book_stock VALUES ('1', '1000');
 INSERT INTO book_stock VALUES ('2', '1000');
 INSERT INTO book_stock VALUES ('3', '1000');
 INSERT INTO book_stock VALUES ('4', '1000');
-
 ```
 
 BookDao.java
@@ -4651,8 +4650,6 @@ public class BookService {
     由此可见, PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的最大区别在于, PROPAGATION_REQUIRES_NEW 完全是一个新的事务, 而 PROPAGATION_NESTED 则是外部事务的子事务, 如果外部事务 commit, 嵌套事务也会被 commit, 这个规则同样适用于 roll back. 
 ```
 
-
-
 #### 3、基于xml的事务配置
 
 jdbcTemplate.xml
@@ -4724,7 +4721,7 @@ jdbcTemplate.xml
 
 主要包含的模块：
 
-![](spring/08Spring源码讲解/image/spring-overview.png)
+![](./images/spring-overview.png)
 
 ### 2、Spring框架的优势
 
@@ -4778,7 +4775,7 @@ jdbcTemplate.xml
 
 ### 6、BeanFactory和ApplicationContext的异同
 
-![](spring/08Spring源码讲解/image/ApplicationContext类图.png)
+![](./images/ApplicationContext类图.png)
 
 相同：
 
@@ -4797,7 +4794,7 @@ jdbcTemplate.xml
 
 ### 7、Spring Bean 的生命周期？
 
-![](spring/08Spring源码讲解/image/bean生命周期.png)
+![](./images/bean生命周期.png)
 
 总结：
 
@@ -4885,7 +4882,7 @@ jdbcTemplate.xml
 
 ### 10、Spring 的不同事务传播行为有哪些，干什么用的？
 
-![](spring/08Spring源码讲解/image/传播特性.jpg)
+![](./images/传播特性.jpg)
 
 ### 11、Spring 中用到了那些设计模式？
 
@@ -5647,7 +5644,6 @@ extends Callback
                                MethodProxy proxy) throws Throwable;
 
 }
-
 ```
 
 ​		在我们的测试类中，大家发现了，我们创建了一个cglib的Enhancer对象，并且设置了父类、回调函数等参数，最重要的入口函数是create()方法：
@@ -5996,7 +5992,6 @@ public class LoadingCache<K, KK, V> {
         return result;
     }
 }
-
 ```
 
 　　通过上面的分析可以得知，这个类主要作用是传入代理类生成器，根据这个代理类生成器以及代理类生成器的key来获取缓存，如果没有获取到则构建一个FutureTask来回调我们之前初始化时传入的 回调函数，并调用其中的apply方法，而具体调用的则是我们传入的代理类生成器的generate(LoadClassData)方法，将返回值覆盖之前的FutureTask成为真正的缓存。所以这个类的主要作用还是缓存。 这样则和5中不使用缓存时调用了一样的方法。所以我们接着来分析生成方法 generate(ClassLoadData),这儿因为我们使用的代理类生成器是Genrator，该类没有重写generate方法，所以回到了父类AbstractClassGenerator的generate方法
@@ -6080,7 +6075,6 @@ public byte[] generate(ClassGenerator cg) throws Exception {
         //将cw写入的东西转换为byte数组返回
         return transform(cw.toByteArray());
     }
-
 ```
 
 ​		这里面主要是新建一个写入器，然后执行我们代理类生成器的generateClass方法将class信息写入这个ClassWriter 最后将里面的东西转换为byte数组返回，所以又回到了我们的代理类生成器的generateClass方法，这儿进入的是Generator的generateClass方法
@@ -6209,7 +6203,6 @@ public byte[] generate(ClassGenerator cg) throws Exception {
             //类写入结束  至此类信息收集完成 并全部写入ClassVisitor
             ce.end_class();
         }
-
 ```
 
 ​		这个方法主要将一个完整的类信息写入ClassVisitor中，例如目前实现的Enhancer.EnhancerKey代理，即实现了newInstance方法， 重写了HashCode,toSting,equals方法，并将newInstance的所有参数作为了成员变量，这儿我们也可以看下具体实现newInstance方法的逻辑 即这个代码 EmitUtils.factory_method(ce, ReflectUtils.getSignature(newInstance)); 如果有兴趣可以去研究asm字节码写入的操作
@@ -6451,7 +6444,6 @@ public void generateClass(ClassVisitor v) throws Exception {
         }
         //类声明结束
         e.end_class();
-
 ```
 
 ​		可以看到这儿也是声明一个写入类 然后按照Ehancer的代理生成策略写入符合的class信息然后返回，最红依旧会执行toByteArray方法返回byte[]数组，这样则又回到了步骤中 根据类加载器 字节码数组来动态将代理类加载进内存中的方法了。最后我们回到根据class获取实例的代码即可返回被代理实例。 而我们执行方法时执行的是代理类中对应的方法，然后调用我们传入的callback执行 原理和jdk动态代理类似，至此 cglib动态代理源码分析到此结束。

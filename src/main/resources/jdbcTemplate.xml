@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       https://www.springframework.org/schema/tx/spring-tx.xsd
+">
+
+    <context:component-scan base-package="com.zph"></context:component-scan>
+    <context:property-placeholder location="classpath:db.properties"></context:property-placeholder>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="driverClassName" value="${jdbc.driverName}"></property>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"></constructor-arg>
+    </bean>
+
+    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"></constructor-arg>
+    </bean>
+
+
+    <!--事务控制-->
+    <!--配置事务管理器的bean-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+    <!--
+    基于xml配置的事务：依赖tx名称空间和aop名称空间
+        1、spring中提供事务管理器（切面），配置这个事务管理器
+        2、配置出事务方法
+        3、告诉spring哪些方法是事务方法（事务切面按照我们的切入点表达式去切入事务方法）
+    -->
+    <bean id="bookService" class="com.zph.jdbctemplate.service.BookService"></bean>
+    <aop:config>
+        <aop:pointcut id="txPoint" expression="execution(* com.zph.jdbctemplate.service.*.*(..))"/>
+        <!--事务建议：advice-ref:指向事务管理器的配置-->
+        <aop:advisor advice-ref="myAdvice" pointcut-ref="txPoint"></aop:advisor>
+    </aop:config>
+
+    <tx:advice id="myAdvice" transaction-manager="transactionManager">
+        <!--事务属性-->
+        <tx:attributes>
+            <!--指明哪些方法是事务方法-->
+            <tx:method name="*"/>
+            <tx:method name="checkout" propagation="REQUIRED"/>
+            <tx:method name="get*" read-only="true"></tx:method>
+        </tx:attributes>
+    </tx:advice>
+
+</beans>

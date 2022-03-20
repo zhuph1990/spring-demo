@@ -30,6 +30,8 @@ spring-demo
 
 **动态代理 静态代理**
 
+**XA**  https://www.cnblogs.com/cxxjohnson/p/9145548.html
+
 
 
 

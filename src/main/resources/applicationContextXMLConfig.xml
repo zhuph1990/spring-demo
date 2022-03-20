@@ -259,8 +259,8 @@
     <bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="username" value="${jdbc.username}"></property>
         <property name="password" value="${jdbc.password}"></property>
-        <property name="url" value="${url}"></property>
-        <property name="driverClassName" value="${driverClassName}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="driverClassName" value="${jdbc.driverClassName}"></property>
     </bean>
 
     <bean id="person12" class="com.zph.xmlconfigation.bean.Person">

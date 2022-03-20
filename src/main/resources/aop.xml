@@ -10,6 +10,7 @@
     <bean id="logUtil" class="com.zph.aop.util.LogUtil"></bean>
     <bean id="securityUtil" class="com.zph.aop.util.SecurityUtil"></bean>
     <bean id="myCalculator" class="com.zph.aop.service.MyCalculator"></bean>
+
     <!--配置aop-->
     <aop:config>
         <aop:pointcut id="globalPoint" expression="execution( Integer com.zph.aop.service.MyCalculator.*(..))"/>
